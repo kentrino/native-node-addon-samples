@@ -1,6 +1,6 @@
 #include <iostream>
 #include <node.h>
-#include "simple_object.h"
+#include "hello_stack.h"
 
 namespace demo {
 
@@ -12,11 +12,11 @@ using v8::String;
 using v8::Value;
 
 void CreateNewInstance(const FunctionCallbackInfo<Value>& args) {
-  SimpleObject::CreateNewInstance(args);
+  HelloStack::CreateNewInstance(args);
 }
 
 void Init(Local<Object> exports, Local<Object> module) {
-  SimpleObject::LoadConstructor(exports->GetIsolate());
+  HelloStack::LoadConstructor(exports->GetIsolate());
 
   NODE_SET_METHOD(module, "exports", CreateNewInstance);
 }

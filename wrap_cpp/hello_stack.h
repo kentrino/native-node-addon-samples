@@ -7,7 +7,7 @@
 
 namespace demo {
 
-class SimpleObject : public node::ObjectWrap {
+class HelloStack : public node::ObjectWrap {
  public:
   static void LoadConstructor(v8::Isolate* isolate);
   static void CreateNewInstance(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -16,8 +16,8 @@ class SimpleObject : public node::ObjectWrap {
   std::vector<double> stack_;
 
  private:
-  explicit SimpleObject();
-  ~SimpleObject();
+  explicit HelloStack();
+  ~HelloStack();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static v8::Persistent<v8::Function> constructor;
