@@ -18,7 +18,7 @@ using v8::Persistent;
 using v8::String;
 using v8::Value;
 
-Persistent<Function> SimpleObject::constructor_;
+Persistent<Function> SimpleObject::constructor;
 
 SimpleObject::SimpleObject() {
 }
@@ -30,10 +30,12 @@ void SimpleObject::LoadConstructor(Isolate* isolate) {
   HandleScope scope(isolate);
   Local<FunctionTemplate> tpl = FunctionTemplate::New(isolate, New);
   tpl->SetClassName(String::NewFromUtf8(isolate, "SimpleObject"));
-  // 関数の場合は1以上である必要があるらしい
+  // ラップ・オブジェクトなので1以上である必要がある。内部の実装まで見ていないが、おそらく
+  // 内部にSimpleObjectへの参照を持っている
+  // TODO: SimpleObjectはGC対象になっている？
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
-  constructor_.Reset(isolate, tpl->GetFunction());
+  SimpleObject::constructor.Reset(isolate, tpl->GetFunction());
 }
 
 // コンストラクタの実体（普通の関数）
@@ -60,7 +62,7 @@ void SimpleObject::CreateNewInstance(const FunctionCallbackInfo<Value>& args) {
 
   const unsigned argc = 0;
   Local<Value> argv[argc] = {};
-  Local<Function> constructor = Local<Function>::New(isolate, constructor_);
+  Local<Function> constructor = Local<Function>::New(isolate, SimpleObject::constructor);
   Local<Context> context = isolate->GetCurrentContext();
   Local<Object> instance = constructor->NewInstance(context, argc, argv).ToLocalChecked();
   args.GetReturnValue().Set(instance);

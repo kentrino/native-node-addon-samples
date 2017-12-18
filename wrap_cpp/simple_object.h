@@ -16,7 +16,7 @@ class SimpleObject : public node::ObjectWrap {
   ~SimpleObject();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static v8::Persistent<v8::Function> constructor_;
+  static v8::Persistent<v8::Function> constructor;
 };
 
 }
