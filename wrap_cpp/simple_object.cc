@@ -6,6 +6,7 @@
 namespace demo {
 
 using v8::Context;
+using v8::Exception;
 using v8::Function;
 using v8::FunctionCallbackInfo;
 using v8::FunctionTemplate;
@@ -35,7 +36,44 @@ void SimpleObject::LoadConstructor(Isolate* isolate) {
   // TODO: SimpleObjectはGC対象になっている？
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
+  NODE_SET_PROTOTYPE_METHOD(tpl, "push", Push);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "pop", Pop);
+
   SimpleObject::constructor.Reset(isolate, tpl->GetFunction());
+}
+
+void SimpleObject::Push(const FunctionCallbackInfo<Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  HandleScope scope(isolate);
+
+  if (args.Length() < 1) {
+    isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong number of arguments.")));
+    return;
+  }
+
+  if (!args[0]->IsNumber()) {
+    isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Argument #1 must be number.")));
+    return;
+  }
+
+  double number = args[0]->NumberValue();
+  
+  SimpleObject* obj = ObjectWrap::Unwrap<SimpleObject>(args.Holder());
+  obj->stack_.push_back(number);
+}
+
+void SimpleObject::Pop(const FunctionCallbackInfo<Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  HandleScope scope(isolate);
+
+  SimpleObject* obj = ObjectWrap::Unwrap<SimpleObject>(args.Holder());
+  if (obj->stack_.size() == 0) {
+    isolate->ThrowException(Exception::RangeError(String::NewFromUtf8(isolate, "Stack is empty.")));
+    return;
+  }
+  double value = obj->stack_.back();
+  args.GetReturnValue().Set(Number::New(isolate, value));
+  obj->stack_.pop_back();
 }
 
 // コンストラクタの実体（普通の関数）
@@ -49,7 +87,7 @@ void SimpleObject::New(const FunctionCallbackInfo<Value>& args) {
     Local<Object> that = args.This();
 
     that->Set(String::NewFromUtf8(isolate, "hello"), String::NewFromUtf8(isolate, "world"));
-    
+  
     obj->Wrap(that);
     args.GetReturnValue().Set(that);
     return;
