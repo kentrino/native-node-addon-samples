@@ -44,8 +44,12 @@ void SimpleObject::New(const FunctionCallbackInfo<Value>& args) {
   // new演算子による呼び出しの場合
   if (args.IsConstructCall()) {
     SimpleObject* obj = new SimpleObject();
-    obj->Wrap(args.This());
-    args.GetReturnValue().Set(args.This());
+    Local<Object> that = args.This();
+
+    that->Set(String::NewFromUtf8(isolate, "hello"), String::NewFromUtf8(isolate, "world"));
+    
+    obj->Wrap(that);
+    args.GetReturnValue().Set(that);
     return;
   }
 }
