@@ -57,7 +57,7 @@ void HelloStack::Push(const FunctionCallbackInfo<Value>& args) {
   }
 
   double number = args[0]->NumberValue();
-  
+
   HelloStack* obj = ObjectWrap::Unwrap<HelloStack>(args.Holder());
   obj->stack_.push_back(number);
 }
@@ -87,7 +87,7 @@ void HelloStack::New(const FunctionCallbackInfo<Value>& args) {
     Local<Object> that = args.This();
 
     that->Set(String::NewFromUtf8(isolate, "hello"), String::NewFromUtf8(isolate, "world"));
-  
+
     obj->Wrap(that);
     args.GetReturnValue().Set(that);
     return;
@@ -106,4 +106,4 @@ void HelloStack::CreateNewInstance(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(instance);
 }
 
-}
+}  // namespace demo
