@@ -29,7 +29,7 @@ HelloStack::~HelloStack() {
 
 void HelloStack::LoadConstructor(Isolate* isolate) {
   HandleScope scope(isolate);
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(isolate, New);
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(isolate, Constructor);
   tpl->SetClassName(String::NewFromUtf8(isolate, "HelloStack"));
   // ラップ・オブジェクトなので1以上である必要がある。内部の実装まで見ていないが、おそらく
   // 内部にHelloStackへの参照を持っている
@@ -76,8 +76,7 @@ void HelloStack::Pop(const FunctionCallbackInfo<Value>& args) {
   obj->stack_.pop_back();
 }
 
-// コンストラクタの実体（普通の関数）
-void HelloStack::New(const FunctionCallbackInfo<Value>& args) {
+void HelloStack::Constructor(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
 
