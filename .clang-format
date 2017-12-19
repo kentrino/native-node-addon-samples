@@ -1,0 +1,7 @@
+---
+BasedOnStyle: Google
+---
+Language: Cpp
+AllowShortFunctionsOnASingleLine: None
+ColumnLimit: 120
+SortIncludes: false
