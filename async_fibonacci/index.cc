@@ -16,11 +16,12 @@ using v8::HandleScope;
 
 namespace demo {
 
-struct AsyncWork {
-  uv_work_t uv_request;
-  Persistent<Function> callback;
-  int number;
-  std::string result;
+class AsyncWork {
+  public:
+    uv_work_t uv_request;
+    Persistent<Function> callback;
+    int number;
+    std::string result;
 };
 
 std::string ComputeFibonacci(int number) {
