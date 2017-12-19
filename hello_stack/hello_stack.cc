@@ -96,7 +96,7 @@ void HelloStack::Constructor(const FunctionCallbackInfo<Value>& args) {
 void HelloStack::CreateNewInstance(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
-  
+
   const unsigned argc = 0;
   Local<Value> argv[argc] = {};
   Local<Function> constructor = Local<Function>::New(isolate, HelloStack::constructor);
