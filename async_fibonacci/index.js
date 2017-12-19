@@ -4,4 +4,4 @@ function print(number) {
   console.log(number);
 }
 
-computeFibonacci(1000, print);
+computeFibonacci(10, print);

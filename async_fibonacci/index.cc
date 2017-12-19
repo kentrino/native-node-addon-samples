@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <gmpxx.h>
 #include <node.h>
 #include <uv.h>
 
@@ -26,17 +25,17 @@ struct AsyncWork {
 
 std::string ComputeFibonacci(int number) {
   int i;
-  mpz_class a, b, c;
+  long long a, b, c;
   a = 1;
   b = 1;
-  if (number == 1) return a.get_str();
-  if (number == 2) return b.get_str();
+  if (number == 1) return std::to_string(a);
+  if (number == 2) return std::to_string(b);
   for (i = 0; i < number - 2; ++i) {
     c = a + b;
     a = b;
     b = c;
   }
-  return c.get_str();
+  return std::to_string(c);
 }
 
 static void DoWork(uv_work_t *req) {
